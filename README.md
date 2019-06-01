@@ -3,18 +3,41 @@
 
 ## Vision
 ### TODO
+
+General feature set:
 - [ ] Add unique/deduplication mode
-- [ ] Add plain formatter with context
+- [ ] Add config file for formatters (-c CONFIG)
+- [ ] Add template support (-t TEMPLATE)
 - [ ] Add variables to input (filename, path, etc.)
+
+Formatters:
+- [ ] Add CSV formatter
+
+## Installation
+
+```sh
+sudo ln -s /path/to/prex.py /usr/sbin/prex
+```
 
 ## Usage
 
-Installation:
 ```sh
-ln -s /usr/sbin/prex /path/to/prex.py
+prex [-i FILE] [-f FORMAT] REGEXP
 ```
 
-Usage:
+If `FILE` is not specified, `STDIN` is used.
+That way, data can be easily piped into prex.
+
+Output formats: `plain (default), json`
+
+### Examples
+
+Use with pipe:
 ```sh
-cat /path/to/my/file | prex "<REGULAR EXPRESSION HERE>"
+echo "Hello" | prex ".*"
+```
+
+Use with file:
+```sh
+prex -i /var/log/foo.log ".*"
 ```
