@@ -3,7 +3,7 @@
 
 Installation:
 ```sh
-ln -s /usr/sbin/prex /path/to/prex/prex.sh
+ln -s /usr/sbin/prex /path/to/prex.py
 ```
 
 Usage:
