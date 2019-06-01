@@ -8,7 +8,9 @@ from json import JSONEncoder
 class PrexEngine:
 	def __init__(self, expr: str, source: str = None):
 		self.eos = False
+		# Compile regular expression for faster matching
 		self.expr = re.compile(expr)
+		# Determine source (stdin or file)
 		self.source = sys.stdin if source == None else open(source, "r")
 
 	def readline(self) -> str:
