@@ -73,7 +73,6 @@ if __name__ == '__main__':
 	# Parse command line options
 	import argparse
 	parser = argparse.ArgumentParser()
-	parser.add_argument("-c", action="store_true", default=False, help="show context")
 	parser.add_argument("-i", action="store", dest="file", help="input file")
 	parser.add_argument("-f", action="store", dest='format', help='output format')
 	parser.add_argument("INPUT", action="store", help="regex pattern")
