@@ -2,7 +2,6 @@
 
 import re
 import sys
-from itertools import tee
 from typing import Sequence
 from json import JSONEncoder
 
