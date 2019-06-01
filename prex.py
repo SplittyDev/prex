@@ -2,6 +2,7 @@
 
 import re
 import sys
+from itertools import tee
 from typing import Sequence
 
 class PrexEngine:
@@ -21,29 +22,47 @@ class PrexEngine:
 			self.eos = True
 		return None if self.eos else line
 
-	def match(self, line: str) -> Sequence[str]:
-		matches = self.expr.match(line)
-		print(matches)
-		pass
-
 	def __iter__(self):
 		return self
 
-	def __next__(self) -> str:
-		line = self.readline()
-		if line == None:
-			raise StopIteration
-		return line
+	def __next__(self):
+		lastmatch = None
+		# Wait for valid match
+		while lastmatch == None:
+			# Read next line
+			line = self.readline()
+			# Stop iteration on EOS
+			if line == None:
+				raise StopIteration
+			# Assign match
+			lastmatch =  self.expr.match(line)
+		# Return match groups
+		return lastmatch.groups()
+
+class Prex2Plain:
+	def __init__(self, prex):
+		self.prex = prex
+
+	def run(self):
+		for matches in self.prex:
+			print(' | '.join(matches))
 
 if __name__ == '__main__':
+	# Define formatters
+	fmts = {
+		"plain": Prex2Plain,
+	}
 	# Parse command line options
 	import argparse
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-c", action="store_true", default=False, help="show context")
-	parser.add_argument("-i", action="store", dest="file", help="specify input file")
-	parser.add_argument("INPUT", action="store", help="the regex pattern")
+	parser.add_argument("-i", action="store", dest="file", help="input file")
+	parser.add_argument("-f", action="store", dest='format', help='output format')
+	parser.add_argument("INPUT", action="store", help="regex pattern")
 	args = parser.parse_args()
+	# Determine formatter
+	fmtc = fmts.get(args.format, Prex2Plain)
 	# Construct PrexEngine
 	prex = PrexEngine(args.INPUT, args.file)
-	for line in prex:
-		groups = prex.match(line)
+	# Run formatter
+	fmtc(prex).run()
