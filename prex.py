@@ -4,6 +4,7 @@ import re
 import sys
 from itertools import tee
 from typing import Sequence
+from json import JSONEncoder
 
 class PrexEngine:
 	def __init__(self, expr: str, source: str = None):
@@ -47,10 +48,26 @@ class Prex2Plain:
 		for matches in self.prex:
 			print(' | '.join(matches))
 
+class Prex2Json:
+	def __init__(self, prex):
+		self.prex = prex
+		self.enc = JSONEncoder()
+
+	def run(self):
+		print("[", end='')
+		first = True
+		for matches in self.prex:
+			json = self.enc.encode(matches)
+			print(json if first else ", {}".format(json), end='')
+			if first:
+				first = False
+		print("]")
+
 if __name__ == '__main__':
 	# Define formatters
 	fmts = {
 		"plain": Prex2Plain,
+		"json": Prex2Json,
 	}
 	# Parse command line options
 	import argparse
